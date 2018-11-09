@@ -1,5 +1,8 @@
 const router = require('express').Router();
 const { addPage } = require('../views');
+const { Page } = require("../models");
+
+
 
 router.get('/', async (req, res, next) => {
   try {
@@ -10,8 +13,17 @@ router.get('/', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
+
+  const title = req.body.title
+  const content = req.body.content
+
+  const page = new Page({
+    title: title,
+    content: content
+  })
   try {
-    res.send(console.log('working'));
+    await page.save();
+    res.redirect('/');
   } catch (error) {
     next(error);
   }
@@ -24,5 +36,7 @@ router.get('/add', async (req, res, next) => {
     next(error);
   }
 });
+
+
 
 module.exports = router;
